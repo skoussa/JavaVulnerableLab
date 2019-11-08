@@ -93,6 +93,21 @@ public class LoginValidator extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
+
+        String user=request.getParameter("username").trim();
+        String pass=request.getParameter("password").trim();
+        try {
+            Connection con = new DBConnect().connect(getServletContext().getRealPath("/WEB-INF/config.properties"));
+            if (con != null && !con.isClosed()) {
+                ResultSet rs = null;
+                Statement stmt = con.createStatement();
+                rs = stmt.executeQuery("select * from users where username='" + user + "' and password='" + pass + "'");
+                rs.next();
+            }
+        }
+        catch(Exception e)
+        {
+        }
     }
 
     /**
@@ -118,5 +133,3 @@ public class LoginValidator extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-
-}
